@@ -41,6 +41,28 @@
 - Copy CSS code
 - Adjustable columns, rows, gap
 
+### 🔑 JWT Decoder
+- Decode JWT token
+- Show header, payload, signature
+- Pretty print JSON
+
+### 🔒 Hash Generator
+- MD5 hash
+- SHA-1 hash
+- SHA-256 hash
+- SHA-512 hash
+
+### ⏰ Timestamp Converter
+- Unix timestamp → Tanggal
+- Tanggal → Unix timestamp
+- Tampilkan WIB, UTC
+- Info hari, minggu
+
+### 🆔 UUID Generator
+- Generate UUID v4
+- Bulk generate (1-100)
+- Copy individual/all
+
 ---
 
 ## 🎨 UI/UX
@@ -95,6 +117,12 @@ Kontribusi sangat diterima! Berikut cara berkontribusi:
 ---
 
 ## 📝 Changelog
+
+### v1.2.0 (2026-07-04)
+- ✨ JWT Decoder
+- ✨ Hash Generator (MD5, SHA-1, SHA-256, SHA-512)
+- ✨ Timestamp Converter
+- ✨ UUID Generator
 
 ### v1.1.0 (2026-07-04)
 - ✨ Redesign UI/UX (glassmorphism, animations)
