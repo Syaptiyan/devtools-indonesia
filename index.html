@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DevTools Indonesia</title>
+    <meta name="description" content="Kumpulan tools developer Indonesia | JSON Formatter, Regex Tester, Color Converter, Encoder/Decoder, CSS Grid Generator">
+    <meta property="og:title" content="DevTools Indonesia">
+    <meta property="og:description" content="Kumpulan tools developer Indonesia">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://upset.dev/api/og?title=DevTools%20Indonesia&subtitle=Tools%20Developer">
+    <meta property="og:url" content="https://syaptiyan.github.io/devtools-indonesia/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#0a0a0a">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: #0a0a0a; color: #fafafa; }
+        .tool-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; transition: all 0.3s; }
+        .tool-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(99,102,241,0.3); transform: translateY(-2px); }
+        .btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.2s; cursor: pointer; }
+        .btn-primary { background: #6366f1; color: white; }
+        .btn-primary:hover { background: #4f46e5; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: white; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+        textarea, input, select { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; color: white; font-family: monospace; font-size: 14px; width: 100%; }
+        textarea:focus, input:focus, select:focus { outline: none; border-color: #6366f1; }
+        .grid-preview { display: grid; gap: 8px; min-height: 200px; }
+        .grid-item { background: rgba(99,102,241,0.2); border: 1px dashed #6366f1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #a5b4fc; }
+        .color-preview { width: 100%; height: 100px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    </style>
+</head>
+<body x-data="devtools()">
+
+<!-- NAV -->
+<nav class="fixed top-0 w-full z-50 bg-gray-950/90 backdrop-blur-xl border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
+                <i class="fas fa-code text-white text-sm"></i>
+            </div>
+            <span class="font-bold text-lg">DevTools</span>
+        </a>
+        <div class="flex gap-2">
+            <a href="https://github.com/Syaptiyan/devtools-indonesia" target="_blank" class="btn btn-secondary">
+                <i class="fab fa-github mr-2"></i>GitHub
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="pt-24 pb-12 px-6">
+    <div class="max-w-7xl mx-auto text-center">
+        <h1 class="text-4xl md:text-5xl font-black mb-4">
+            <span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">DevTools</span>
+            Indonesia
+        </h1>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+            Kumpulan tools developer yang sering dibutuhkan. Semua berjalan di browser, tanpa server.
+        </p>
+    </div>
+</section>
+
+<!-- TOOLS NAV -->
+<section class="px-6 mb-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-wrap gap-2 justify-center">
+            <button class="btn" :class="activeTool==='json'?'btn-primary':'btn-secondary'" @click="activeTool='json'">
+                <i class="fas fa-code mr-2"></i>JSON Formatter
+            </button>
+            <button class="btn" :class="activeTool==='regex'?'btn-primary':'btn-secondary'" @click="activeTool='regex'">
+                <i class="fas fa-search mr-2"></i>Regex Tester
+            </button>
+            <button class="btn" :class="activeTool==='color'?'btn-primary':'btn-secondary'" @click="activeTool='color'">
+                <i class="fas fa-palette mr-2"></i>Color Converter
+            </button>
+            <button class="btn" :class="activeTool==='encoder'?'btn-primary':'btn-secondary'" @click="activeTool='encoder'">
+                <i class="fas fa-lock mr-2"></i>Encoder/Decoder
+            </button>
+            <button class="btn" :class="activeTool==='grid'?'btn-primary':'btn-secondary'" @click="activeTool='grid'">
+                <i class="fas fa-th mr-2"></i>CSS Grid
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- JSON FORMATTER -->
+<section class="px-6 mb-12" x-show="activeTool==='json'" x-transition>
+    <div class="max-w-7xl mx-auto">
+        <div class="tool-card">
+            <h2 class="text-xl font-bold mb-4"><i class="fas fa-code mr-2 text-indigo-400"></i>JSON Formatter</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Input JSON</label>
+                    <textarea x-model="jsonInput" rows="12" placeholder='{"key": "value"}'></textarea>
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Output</label>
+                    <textarea x-model="jsonOutput" rows="12" readonly></textarea>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-4">
+                <button class="btn btn-primary" @click="formatJSON()"><i class="fas fa-magic mr-2"></i>Format</button>
+                <button class="btn btn-secondary" @click="minifyJSON()"><i class="fas fa-compress mr-2"></i>Minify</button>
+                <button class="btn btn-secondary" @click="copyOutput(jsonOutput)"><i class="fas fa-copy mr-2"></i>Copy</button>
+                <button class="btn btn-secondary" @click="jsonInput='';jsonOutput=''"><i class="fas fa-trash mr-2"></i>Clear</button>
+            </div>
+            <div class="mt-4 text-sm text-gray-500" x-show="jsonError" x-text="jsonError"></div>
+        </div>
+    </div>
+</section>
+
+<!-- REGEX TESTER -->
+<section class="px-6 mb-12" x-show="activeTool==='regex'" x-transition>
+    <div class="max-w-7xl mx-auto">
+        <div class="tool-card">
+            <h2 class="text-xl font-bold mb-4"><i class="fas fa-search mr-2 text-green-400"></i>Regex Tester</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Pattern</label>
+                    <input type="text" x-model="regexPattern" placeholder="[a-z]+@[a-z]+\.[a-z]+">
+                    <label class="text-sm text-gray-400 mb-2 block mt-4">Flags</label>
+                    <input type="text" x-model="regexFlags" placeholder="gi">
+                    <label class="text-sm text-gray-400 mb-2 block mt-4">Test String</label>
+                    <textarea x-model="regexInput" rows="6" placeholder="test@example.com"></textarea>
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Matches</label>
+                    <div class="bg-white/5 rounded-lg p-4 min-h-[200px]">
+                        <template x-for="match in regexMatches" :key="match.index">
+                            <div class="mb-2 p-2 bg-green-500/10 border border-green-500/20 rounded-lg">
+                                <span class="text-green-400 font-mono" x-text="match.value"></span>
+                                <span class="text-gray-500 text-xs ml-2" x-text="'Index: '+match.index"></span>
+                            </div>
+                        </template>
+                        <div x-show="regexMatches.length===0" class="text-gray-500">No matches</div>
+                    </div>
+                    <button class="btn btn-primary mt-4" @click="testRegex()"><i class="fas fa-play mr-2"></i>Test</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COLOR CONVERTER -->
+<section class="px-6 mb-12" x-show="activeTool==='color'" x-transition>
+    <div class="max-w-7xl mx-auto">
+        <div class="tool-card">
+            <h2 class="text-xl font-bold mb-4"><i class="fas fa-palette mr-2 text-purple-400"></i>Color Converter</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">HEX</label>
+                    <input type="text" x-model="colorHex" @input="hexToRgb()" placeholder="#6366f1">
+                    <label class="text-sm text-gray-400 mb-2 block mt-4">RGB</label>
+                    <input type="text" x-model="colorRgb" @input="rgbToHex()" placeholder="rgb(99, 102, 241)">
+                    <label class="text-sm text-gray-400 mb-2 block mt-4">HSL</label>
+                    <input type="text" x-model="colorHsl" placeholder="hsl(239, 84%, 67%)">
+                    <div class="color-preview mt-4" :style="'background:'+colorHex"></div>
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Color Picker</label>
+                    <input type="color" x-model="colorHex" @input="hexToRgb()" class="h-32 cursor-pointer">
+                    <div class="mt-4 grid grid-cols-2 gap-2">
+                        <button class="btn btn-secondary" @click="copyOutput(colorHex)"><i class="fas fa-copy mr-2"></i>Copy HEX</button>
+                        <button class="btn btn-secondary" @click="copyOutput(colorRgb)"><i class="fas fa-copy mr-2"></i>Copy RGB</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ENCODER/DECODER -->
+<section class="px-6 mb-12" x-show="activeTool==='encoder'" x-transition>
+    <div class="max-w-7xl mx-auto">
+        <div class="tool-card">
+            <h2 class="text-xl font-bold mb-4"><i class="fas fa-lock mr-2 text-amber-400"></i>Encoder/Decoder</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Input</label>
+                    <textarea x-model="encoderInput" rows="8" placeholder="Text to encode..."></textarea>
+                    <div class="flex gap-2 mt-4">
+                        <button class="btn btn-primary" @click="encode('base64')"><i class="fas fa-lock mr-2"></i>Base64 Encode</button>
+                        <button class="btn btn-primary" @click="encode('url')"><i class="fas fa-link mr-2"></i>URL Encode</button>
+                        <button class="btn btn-primary" @click="encode('html')"><i class="fas fa-code mr-2"></i>HTML Encode</button>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Output</label>
+                    <textarea x-model="encoderOutput" rows="8" readonly></textarea>
+                    <div class="flex gap-2 mt-4">
+                        <button class="btn btn-secondary" @click="decode('base64')"><i class="fas fa-unlock mr-2"></i>Base64 Decode</button>
+                        <button class="btn btn-secondary" @click="decode('url')"><i class="fas fa-link mr-2"></i>URL Decode</button>
+                        <button class="btn btn-secondary" @click="decode('html')"><i class="fas fa-code mr-2"></i>HTML Decode</button>
+                        <button class="btn btn-secondary" @click="copyOutput(encoderOutput)"><i class="fas fa-copy mr-2"></i>Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CSS GRID -->
+<section class="px-6 mb-12" x-show="activeTool==='grid'" x-transition>
+    <div class="max-w-7xl mx-auto">
+        <div class="tool-card">
+            <h2 class="text-xl font-bold mb-4"><i class="fas fa-th mr-2 text-red-400"></i>CSS Grid Generator</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Columns</label>
+                    <input type="number" x-model="gridCols" min="1" max="12" value="3">
+                    <label class="text-sm text-gray-400 mb-2 block mt-4">Rows</label>
+                    <input type="number" x-model="gridRows" min="1" max="12" value="3">
+                    <label class="text-sm text-gray-400 mb-2 block mt-4">Gap (px)</label>
+                    <input type="number" x-model="gridGap" min="0" max="50" value="8">
+                    <div class="mt-4">
+                        <label class="text-sm text-gray-400 mb-2 block">CSS Output</label>
+                        <textarea x-model="gridCss" rows="6" readonly></textarea>
+                    </div>
+                    <button class="btn btn-secondary mt-2" @click="copyOutput(gridCss)"><i class="fas fa-copy mr-2"></i>Copy CSS</button>
+                </div>
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">Preview</label>
+                    <div class="grid-preview bg-white/5 rounded-lg p-4" :style="gridCss"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-8 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <p class="text-gray-500 text-sm">&copy; 2026 Syaptiyan Ade Putra. Made with ❤️ in Indonesia</p>
+    </div>
+</footer>
+
+<script>
+function devtools() {
+    return {
+        activeTool: 'json',
+        jsonInput: '',
+        jsonOutput: '',
+        jsonError: '',
+        regexPattern: '',
+        regexFlags: 'gi',
+        regexInput: '',
+        regexMatches: [],
+        colorHex: '#6366f1',
+        colorRgb: 'rgb(99, 102, 241)',
+        colorHsl: 'hsl(239, 84%, 67%)',
+        encoderInput: '',
+        encoderOutput: '',
+        gridCols: 3,
+        gridRows: 3,
+        gridGap: 8,
+        gridCss: '',
+        init() {
+            this.updateGrid();
+        },
+        formatJSON() {
+            try {
+                const obj = JSON.parse(this.jsonInput);
+                this.jsonOutput = JSON.stringify(obj, null, 2);
+                this.jsonError = '';
+            } catch (e) {
+                this.jsonError = 'Error: ' + e.message;
+            }
+        },
+        minifyJSON() {
+            try {
+                const obj = JSON.parse(this.jsonInput);
+                this.jsonOutput = JSON.stringify(obj);
+                this.jsonError = '';
+            } catch (e) {
+                this.jsonError = 'Error: ' + e.message;
+            }
+        },
+        testRegex() {
+            try {
+                const regex = new RegExp(this.regexPattern, this.regexFlags);
+                const matches = [];
+                let match;
+                while ((match = regex.exec(this.regexInput)) !== null) {
+                    matches.push({ value: match[0], index: match.index });
+                    if (!regex.global) break;
+                }
+                this.regexMatches = matches;
+            } catch (e) {
+                this.regexMatches = [];
+            }
+        },
+        hexToRgb() {
+            const hex = this.colorHex.replace('#', '');
+            if (hex.length === 6) {
+                const r = parseInt(hex.substr(0, 2), 16);
+                const g = parseInt(hex.substr(2, 2), 16);
+                const b = parseInt(hex.substr(4, 2), 16);
+                this.colorRgb = `rgb(${r}, ${g}, ${b})`;
+            }
+        },
+        rgbToHex() {
+            const match = this.colorRgb.match(/\d+/g);
+            if (match && match.length >= 3) {
+                const hex = match.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
+                this.colorHex = '#' + hex;
+            }
+        },
+        encode(type) {
+            if (type === 'base64') this.encoderOutput = btoa(this.encoderInput);
+            else if (type === 'url') this.encoderOutput = encodeURIComponent(this.encoderInput);
+            else if (type === 'html') this.encoderOutput = this.encoderInput.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        },
+        decode(type) {
+            try {
+                if (type === 'base64') this.encoderOutput = atob(this.encoderInput);
+                else if (type === 'url') this.encoderOutput = decodeURIComponent(this.encoderInput);
+                else if (type === 'html') this.encoderOutput = this.encoderInput.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+            } catch (e) {
+                this.encoderOutput = 'Error: ' + e.message;
+            }
+        },
+        updateGrid() {
+            this.gridCss = `display: grid;\ngrid-template-columns: repeat(${this.gridCols}, 1fr);\ngrid-template-rows: repeat(${this.gridRows}, 1fr);\ngap: ${this.gridGap}px;`;
+        },
+        copyOutput(text) {
+            navigator.clipboard.writeText(text);
+        }
+    };
+}
+</script>
+
+</body>
+</html>
