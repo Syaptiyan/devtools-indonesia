@@ -15,16 +15,19 @@
 ### 📝 JSON Formatter
 - Format JSON (pretty print)
 - Minify JSON
+- Validate JSON
 - Copy output
 
 ### 🔍 Regex Tester
-- Test regex pattern
+- Test regex pattern (real-time)
 - Highlight matches
 - Support flags (g, i, m)
+- Show match index
 
 ### 🎨 Color Converter
 - HEX → RGB → HSL
 - Color picker
+- 15 color presets
 - Copy format
 
 ### 🔐 Encoder/Decoder
@@ -34,17 +37,30 @@
 
 ### 📐 CSS Grid Generator
 - Generate CSS Grid
-- Visual preview
+- Visual preview (live)
 - Copy CSS code
+- Adjustable columns, rows, gap
+
+---
+
+## 🎨 UI/UX
+
+- **Glassmorphism** - Efek frosted glass
+- **Gradient glow** - Background gradient
+- **Grid pattern** - Background grid
+- **Animations** - Fade-in, hover effects
+- **Toast notification** - Feedback saat copy
+- **Dark mode** - Tema gelap
+- **Responsive** - Tampilan optimal di semua device
 
 ---
 
 ## 🛠️ Teknologi
 
 - HTML5
-- Tailwind CSS
-- Alpine.js
-- Font Awesome
+- Tailwind CSS (v3)
+- Alpine.js (v3)
+- Font Awesome (v6)
 
 ---
 
@@ -60,6 +76,7 @@
 devtools-indonesia/
 ├── index.html
 ├── README.md
+├── CHANGELOG.md
 └── LICENSE
 ```
 
@@ -78,6 +95,17 @@ Kontribusi sangat diterima! Berikut cara berkontribusi:
 ---
 
 ## 📝 Changelog
+
+### v1.1.0 (2026-07-04)
+- ✨ Redesign UI/UX (glassmorphism, animations)
+- ✨ Toast notification saat copy
+- ✨ Color presets (15 warna)
+- ✨ Validate JSON button
+- ✨ Real-time regex tester
+- ✨ Gradient glow background
+- ✨ Grid pattern background
+- ✨ Better input styling
+- ✨ Badge & status indicators
 
 ### v1.0.0 (2026-07-04)
 - 🎉 Initial release
